@@ -1,4 +1,4 @@
-package day5;
+package day05;
 
 import common.FileParser;
 
@@ -8,7 +8,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Ex2 {
+public class Ex1 {
     private static final String COUNT = "count";
     private static final String FROM = "from";
     private static final String TO = "to";
@@ -56,12 +56,8 @@ public class Ex2 {
             int to = Integer.parseInt(matcher.group(TO)) - 1;
             Stack<Character> stackFrom = stacks.get(from);
             Stack<Character> stackTo = stacks.get(to);
-            Stack<Character> tmp = new Stack<>();
             for (int j = 0; j < count; ++j) {
-                tmp.push(stackFrom.pop());
-            }
-            for (int j = 0; j < count; ++j) {
-                stackTo.push(tmp.pop());
+                stackTo.push(stackFrom.pop());
             }
         }
 

@@ -1,4 +1,4 @@
-package day1;
+package day01;
 
 import common.FileParser;
 import org.apache.commons.lang3.StringUtils;

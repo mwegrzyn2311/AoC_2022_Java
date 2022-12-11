@@ -1,11 +1,10 @@
-package day6;
+package day06;
 
 import common.FileParser;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class Ex1 {
     private static final int LENGTH = 4;

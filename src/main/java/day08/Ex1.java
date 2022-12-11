@@ -1,14 +1,12 @@
-package day8;
+package day08;
 
 import com.google.common.collect.ImmutableList;
 import common.FileParser;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Ex1 {
     public static void main(String[] args) throws Exception {

@@ -1,7 +1,6 @@
-package day7;
+package day07;
 
 import common.FileParser;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 
-public class Ex2 {
+public class Ex1 {
     private static final String CMD = "cmd";
     private static final String COMMAND_FORMAT_NO_ARGS = format("\\$ (?<%s>\\w+)", CMD);
     private static final String ARG = "arg";
@@ -25,8 +24,7 @@ public class Ex2 {
     private static final Pattern DIR_PATTERN = Pattern.compile(DIR_FORMAT);
     private static final Pattern FILE_PATTERN = Pattern.compile(FILE_FORMAT);
 
-    private static final long TOTAL = 70000000L;
-    private static final long REQUIRED = 30000000L;
+    private static final long UNDER = 100000L;
 
     public static void main(String[] args) throws Exception {
         List<String> input = FileParser.inputToStrList("/input07.txt");
@@ -71,11 +69,7 @@ public class Ex2 {
             throw new Exception(format("Unhandled line: %s", line));
         }
 
-        long minSize = REQUIRED - (TOTAL - root.getSize());
-        System.out.println(minSize);
-
-        //root.printDirs(0);
-        System.out.println(root.getSmallestBigDirectory(root, minSize).getSize());
+        System.out.println(root.getSumOfDirsOfAtMostSize(UNDER));
     }
 
     static abstract class SystemElement {
@@ -135,21 +129,10 @@ public class Ex2 {
             this.size = filesSize + dirsSize;
         }
 
-        public Directory getSmallestBigDirectory(Directory currRes, long minSize) {
-            if (this.getSize() >= minSize && this.getSize() <= currRes.getSize()) {
-                currRes = this;
-            }
-            for (Directory dir : directories) {
-                currRes = dir.getSmallestBigDirectory(currRes, minSize);
-            }
-            return currRes;
-        }
-
-        public void printDirs(int level) {
-            System.out.println(StringUtils.repeat('-', level) + this.getName() + " " + getSize());
-            for (Directory dir : directories) {
-                dir.printDirs(level + 1);
-            }
+        public long getSumOfDirsOfAtMostSize(long atMost) {
+            return directories.stream()
+                    .mapToLong(dir -> dir.getSumOfDirsOfAtMostSize(atMost))
+                    .sum() + (this.getSize() <= atMost ? this.size : 0L);
         }
 
         @Override

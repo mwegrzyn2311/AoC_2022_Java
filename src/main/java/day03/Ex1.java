@@ -1,4 +1,4 @@
-package day3;
+package day03;
 
 import common.FileParser;
 
@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Ex1 {
     public static void main(String[] args) throws Exception {

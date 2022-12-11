@@ -1,4 +1,4 @@
-package day2;
+package day02;
 
 import common.FileParser;
 
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
-public class Ex1 {
+public class Ex2 {
 
     public static void main(String[] args) throws Exception {
         List<String> input = FileParser.inputToStrList("/input02.txt");
@@ -28,7 +28,10 @@ public class Ex1 {
         private final RSPPlayer player2;
 
         public static RSPRound fromString(String rspString) {
-            return new RSPRound(RSPPlayer.fromChar(rspString.charAt(0)), RSPPlayer.fromChar(rspString.charAt(2)));
+            RSPPlayer player1 = RSPPlayer.fromChar(rspString.charAt(0));
+            RSPResult player2result = RSPResult.fromChar(rspString.charAt(2));
+            RSPPlayer player2 = RSPPlayer.fromResultAndOpponent(player2result, player1);
+            return new RSPRound(player1, player2);
         }
 
         public RSPRound(RSPPlayer player1, RSPPlayer player2) {
@@ -66,15 +69,24 @@ public class Ex1 {
 
         private final int resultVal;
 
-        public static RSPResult getFromPlayers(RSPPlayer resultFor, RSPPlayer opponent) {
-            int choicesDiff = resultFor.choiceVal - opponent.choiceVal;
-            return switch (choicesDiff) {
-                case 0 -> DRAW;
-                case 1, -2 -> WIN;
-                case -1, 2 -> LOSS;
-                default -> throw new IllegalArgumentException(format("Unhandled choice diff %d from  [%s vs %s]", choicesDiff, resultFor.toString(), opponent.toString()));
+        public static RSPResult fromChar(char resultChar) {
+            return switch(resultChar) {
+                case 'X' -> LOSS;
+                case 'Y' -> DRAW;
+                case 'Z' -> WIN;
+                default -> throw new IllegalArgumentException(format("Input for RSPRound has to be one of {X,Y,Z} but was %c", resultChar));
             };
         }
+
+         public static RSPResult getFromPlayers(RSPPlayer resultFor, RSPPlayer opponent) {
+             int choicesDiff = resultFor.choiceVal - opponent.choiceVal;
+             return switch (choicesDiff) {
+                 case 0 -> DRAW;
+                 case 1, -2 -> WIN;
+                 case -1, 2 -> LOSS;
+                 default -> throw new IllegalArgumentException(format("Unhandled choice diff %d from  [%s vs %s]", choicesDiff, resultFor.toString(), opponent.toString()));
+             };
+         }
 
         RSPResult(int resultVal) {
             this.resultVal = resultVal;
@@ -94,10 +106,27 @@ public class Ex1 {
 
         public static RSPPlayer fromChar(char choice) {
             return switch (choice) {
-                case 'A', 'X' -> ROCK;
-                case 'B', 'Y' -> PAPER;
-                case 'C', 'Z' -> SCISSORS;
-                default -> throw new IllegalArgumentException(format("Input for RSPPLayer has to be one of {A,B,C,X,Y,Z} but was %c", choice));
+                case 'A' -> ROCK;
+                case 'B' -> PAPER;
+                case 'C' -> SCISSORS;
+                default -> throw new IllegalArgumentException(format("Input for RSPPlayer has to be one of {A,B,C} but was %c", choice));
+            };
+        }
+
+        public static RSPPlayer fromResultAndOpponent(RSPResult result, RSPPlayer opponent) {
+            return switch (result) {
+                case LOSS -> fromInt((opponent.choiceVal + 2) % 3);
+                case DRAW -> opponent;
+                case WIN -> fromInt((opponent.choiceVal + 1) % 3);
+            };
+        }
+
+        public static RSPPlayer fromInt(int val) {
+            return switch(val) {
+                case 1 -> ROCK;
+                case 2 -> PAPER;
+                case 0, 3 -> SCISSORS;
+                default -> throw new IllegalArgumentException(format("Val for RSPPlayer has to be one of {1,2,3} but was %d", val));
             };
         }
 

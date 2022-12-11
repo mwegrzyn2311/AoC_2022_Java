@@ -1,4 +1,4 @@
-package day9;
+package day09;
 
 import common.Dir2d;
 import common.FileParser;
