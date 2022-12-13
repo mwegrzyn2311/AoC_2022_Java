@@ -77,6 +77,10 @@ public class Vec2d implements Cloneable {
         return new Vec2d(this.x + other.x, this.y + other.y);
     }
 
+    public Vec2d multiply(int multiplier) {
+        return new Vec2d(this.x * multiplier, this.y * multiplier);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

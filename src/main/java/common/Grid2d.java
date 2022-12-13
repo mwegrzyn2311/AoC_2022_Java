@@ -22,6 +22,14 @@ public class Grid2d<T> {
                         .forEach(pos -> grid.put(pos, defaultObj)));
     }
 
+    public Map<Vec2d, T> getGrid() {
+        return this.grid;
+    }
+
+    public boolean hasEleAt(Vec2d pos) {
+        return grid.containsKey(pos);
+    }
+
     public void add(Vec2d pos, T ele) {
         this.grid.put(pos, ele);
     }

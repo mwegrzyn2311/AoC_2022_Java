@@ -18,6 +18,15 @@ public enum Dir2d {
         return this.unitVector;
     }
 
+    public boolean isOpposite(Dir2d other) {
+        return switch (this) {
+            case UP -> other == DOWN;
+            case DOWN -> other == UP;
+            case LEFT -> other == RIGHT;
+            case RIGHT -> other == LEFT;
+        };
+    }
+
     public static Dir2d fromChar(char c) throws Exception {
         return switch (Character.toLowerCase(c)) {
             case 'u' -> UP;
