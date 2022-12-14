@@ -33,28 +33,18 @@ public class Ex1 {
     }
 
     public static int childrenSorted(TreeNode<Integer> left, TreeNode<Integer> right) {
-        List<TreeNode<Integer>> lChildren = left.getChildren();
-        List<TreeNode<Integer>> rChildren = right.getChildren();
-        if (left.isLeaf())
-            lChildren = singletonList(left);
-        if (right.isLeaf())
-            rChildren = singletonList(right);
+        if (left.isLeaf() && right.isLeaf()) {
+            if (isNull(left.getValue()) || isNull(right.getValue()))
+                return 0;
+            else
+                return right.getValue() - left.getValue();
+        }
+
+        List<TreeNode<Integer>> lChildren = left.isLeaf() ? singletonList(left) : left.getChildren();
+        List<TreeNode<Integer>> rChildren = right.isLeaf() ? singletonList(right) : right.getChildren();
 
         for (int i = 0; i < lChildren.size() && i < rChildren.size(); ++i) {
-            TreeNode<Integer> lChild = lChildren.get(i);
-            TreeNode<Integer> rChild = rChildren.get(i);
-            if (lChild.isLeaf() && rChild.isLeaf()) {
-                if (isNull(lChild.getValue()) || isNull(rChild.getValue())) {
-                    continue;
-                } else if (lChild.getValue().equals(rChild.getValue())) {
-                    continue;
-                } else if (lChild.getValue() > rChild.getValue()) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
-            int childrenRes = childrenSorted(lChild, rChild);
+            int childrenRes = childrenSorted(lChildren.get(i), rChildren.get(i));
             if (childrenRes != 0)
                 return childrenRes;
         }
