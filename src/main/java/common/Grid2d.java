@@ -1,14 +1,18 @@
 package common;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static common.Utils.getLine;
 import static java.lang.String.format;
 
 public class Grid2d<T> {
-    private final Map<Vec2d, T> grid = new HashMap();
+    protected final Map<Vec2d, T> grid = new HashMap();
 
     public Grid2d() {}
 
@@ -56,5 +60,28 @@ public class Grid2d<T> {
     public void modify(Vec2d pos, Function<T, T> operation) {
         if (grid.containsKey(pos))
             grid.put(pos, operation.apply(grid.get(pos)));
+    }
+
+    public List<List<Vec2d>> calculateBounds() {
+        int left = grid.keySet().stream().mapToInt(Vec2d::getX).min().orElse(0);
+        int top = grid.keySet().stream().mapToInt(Vec2d::getY).min().orElse(0);
+        int right = grid.keySet().stream().mapToInt(Vec2d::getX).max().orElse(1);
+        int bot = grid.keySet().stream().mapToInt(Vec2d::getY).max().orElse(1);
+        return getLine(top, bot)
+                .mapToObj(y -> getLine(left, right)
+                        .mapToObj(x -> new Vec2d(x, y))
+                        .collect(Collectors.toList()))
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public String toString() {
+        return calculateBounds().stream()
+                .map(row -> row.stream()
+                        .map(pos -> hasEleAt(pos) ? grid.get(pos).toString() : ".")
+                        .collect(Collectors.joining("")))
+                .collect(Collectors.joining("\n"));
     }
 }

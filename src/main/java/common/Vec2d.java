@@ -1,7 +1,11 @@
 package common;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static common.Utils.getLine;
 import static java.lang.Math.abs;
 import static java.lang.String.format;
 
@@ -18,6 +22,29 @@ public class Vec2d implements Cloneable {
         this.x = other.x;
         this.y = other.y;
     }
+
+    public static Vec2d fromString(String vecStr) {
+        String[] pos = vecStr.split(",");
+        return new Vec2d(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]));
+    }
+
+    public static List<Vec2d> createVecLine(Vec2d from, Vec2d to) throws Exception {
+        if (from.getX() == to.getX()) {
+            return getLine(from.getY(), to.getY())
+                    .mapToObj(y -> new Vec2d(from.getX(), y))
+                    .collect(Collectors.toList());
+        } else if (from.getY() == to.getY()) {
+            return getLine(from.getX(), to.getX())
+                    .mapToObj(x -> new Vec2d(x, from.getY()))
+                    .collect(Collectors.toList());
+        } else {
+            throw new Exception(
+                    format("For createVecLine vecs have to be one same axis: either x or y, but were: %s and %s.%n",
+                            from.toString(), to.toString()));
+        }
+    }
+
+
 
     public int getX() {
         return x;
@@ -46,7 +73,7 @@ public class Vec2d implements Cloneable {
             return new Vec2d(0, 0);
         if (xDiff == 0) {
             return new Vec2d(0, yDiff / abs(yDiff));
-        } else if (yDiff == 0){
+        } else if (yDiff == 0) {
             return new Vec2d(xDiff / abs(xDiff), 0);
         } else if (abs(xDiff) == abs(yDiff)) {
             return new Vec2d(xDiff / abs(xDiff), yDiff / abs(yDiff));
