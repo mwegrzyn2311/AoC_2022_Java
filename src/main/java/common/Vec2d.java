@@ -108,6 +108,10 @@ public class Vec2d implements Cloneable {
         return new Vec2d(this.x * multiplier, this.y * multiplier);
     }
 
+    public int distManhattan(Vec2d other) {
+        return abs(this.x - other.x) + abs(this.y - other.y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
