@@ -117,8 +117,7 @@ public class Vec2d implements Cloneable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vec2d vec2d = (Vec2d) o;
-        return x == vec2d.x &&
-                y == vec2d.y;
+        return x == vec2d.x && y == vec2d.y;
     }
 
     @Override
