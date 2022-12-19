@@ -15,11 +15,11 @@ import static java.util.Objects.isNull;
 
 public class Ex2 {
     public static void main(String[] args) throws Exception {
-        List<String> input = FileParser.inputToStrList("/input17_test.txt");
+        List<String> input = FileParser.inputToStrList("/input17.txt");
 
         TetrisCave cave = TetrisCave.fromString(input.get(0));
 
-        System.out.println(cave.simulateHeightAfterSomeRocks(100000L));
+        System.out.println(cave.simulateHeightAfterSomeRocks(10000L));
     }
 
     static class TetrisCave {
@@ -33,7 +33,8 @@ public class Ex2 {
         private long rocksFallen = 0;
         private int currPush = 0;
         private TetrisRock curr = null;
-
+        private int prevMaxHeight = 0;
+        
         public int simulateHeightAfterSomeRocks(long rocks) {
             while (rocksFallen < rocks) {
                 step();
@@ -65,6 +66,9 @@ public class Ex2 {
                 curr = null;
                 optimizeOccupied();
                 ++rocksFallen;
+                int newMaxHeight = maxHeight();
+                System.out.printf("New max = %d, diff = %d - after %d.%n", newMaxHeight, newMaxHeight - prevMaxHeight, rocksFallen);
+                prevMaxHeight = newMaxHeight;
             }
         }
 
